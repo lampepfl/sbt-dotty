@@ -50,7 +50,7 @@ sbt.version=0.13.13
 plugins.sbt
 -----------
 ```
-addSbtPlugin("com.felixmulder" % "sbt-dotty" % "0.1.9")
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC1")
 ```
 
 Troubleshooting
@@ -58,5 +58,5 @@ Troubleshooting
 * **P:** I'm getting unresolved dependency errors.
 
   **A:** You've probably set `scalaVersion` in your `build.sbt` file. The
-  plugin takes care of setting the correct `scalaVersion` so please don't
-  overwrite this.
+  plugin takes care of setting the correct `scalaVersion`, so please don't
+  override this.
