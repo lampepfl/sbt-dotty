@@ -4,6 +4,10 @@ import sbt._
 import sbt.Keys._
 
 object DottyPlugin extends AutoPlugin {
+  // http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22ch.epfl.lamp%22%20dotty
+  val dottyVersion: String =
+    sys.env.getOrElse("COMPILERVERSION", "0.1.1-20170214-606e36b-NIGHTLY")
+
   object autoImport {
     // NOTE:
     // - this is a def to support `scalaVersion := dottyLatestNightlyBuild`
@@ -22,16 +26,25 @@ object DottyPlugin extends AutoPlugin {
       println(s"Latest Dotty nightly build version: $latest")
       latest
     }
+
+    // Allows plugin users to enable Dotty in a single line:
+    //   project.configure(dottyEnable)         # regular project
+    //   crossProject.jvmConfigure(dottyEnable) # Scala.js cross-project
+    // while keeping existing build setttings unchanged.
+    def dottyEnable(project: Project): Project = dottyEnableWithVersion(project, dottyVersion)
+    def dottyEnableWithVersion(project: Project, dottyVersion: String): Project =
+      project
+        .settings(
+          scalaVersion := dottyVersion,
+          // `scalacOption +=` keeps existing options such as -Xwarn-unused-import
+          // which are invalid with Dotty.
+          scalacOptions := Seq("-language:Scala2")
+        )
+        .enablePlugins(DottyPlugin)
   }
   override def requires: Plugins = plugins.JvmPlugin
 
-  override def projectSettings: Seq[Setting[_]] = {
-
-    // http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22ch.epfl.lamp%22%20dotty
-    val dottyVersion = sys.env.get("COMPILERVERSION") getOrElse {
-      "0.1.1-20170214-606e36b-NIGHTLY"
-    }
-
+  override def projectSettings: Seq[Setting[_]] =
     Seq(
       // Dotty version
       scalaVersion := dottyVersion,
@@ -55,5 +68,4 @@ object DottyPlugin extends AutoPlugin {
       // dotty requires the latest version of the sbt compiler interface
       resolvers += Resolver.typesafeIvyRepo("releases")
     )
-  }
 }
