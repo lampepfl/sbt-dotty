@@ -10,3 +10,4 @@ branches:
 
 script:
     - (sbt publishLocal && cd example && sbt ";compile;run")
+    - sbt scripted

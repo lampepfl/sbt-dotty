@@ -1,0 +1,6 @@
+pipeline:
+  test:
+    image: lampepfl/dotty:latest
+    pull: true
+    commands:
+      - sbt scripted

@@ -1,14 +1,21 @@
+import sbt.ScriptedPlugin._
 import sbt.Keys._
 import sbt._
 
 lazy val root = (project in file("."))
-  .settings(commonSettings ++ publishingSettings)
+  .settings(
+    commonSettings,
+    publishingSettings,
+    sbt.ScriptedPlugin.scriptedSettings,
+    scriptedLaunchOpts += "-Dplugin.version=" + version.value,
+    scriptedBufferLog := false
+  )
 
 
 lazy val commonSettings = Seq(
   organization := "ch.epfl.lamp",
   name := "sbt-dotty",
-  version := "0.1.0-RC1",
+  version := "0.1.0-SNAPSHOT",
   scalacOptions ++= Seq("-feature", "-deprecation", "-encoding", "utf8"),
   scalaVersion := "2.10.6",
   sbtPlugin := true
