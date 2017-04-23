@@ -42,16 +42,6 @@ object DottyPlugin extends AutoPlugin {
       // to 0.1 (the dotty version number)
       scalaBinaryVersion := "2.11",
 
-      // bug in sbt 0.13.13: https://github.com/sbt/sbt/issues/2867
-      // should be fixed in 0.13.14
-      ivyScala ~= (_ map (_ copy (overrideScalaVersion = false))),
-
-      // Compiler on tool path
-      libraryDependencies += "ch.epfl.lamp" % "dotty_2.11" % scalaVersion.value % "scala-tool",
-
-      // Bridge which allows REPL and compilation via dotty
-      scalaCompilerBridgeSource := ("ch.epfl.lamp" % "dotty-sbt-bridge" % scalaVersion.value % "component").sources(),
-
       // dotty requires the latest version of the sbt compiler interface
       resolvers += Resolver.typesafeIvyRepo("releases")
     )

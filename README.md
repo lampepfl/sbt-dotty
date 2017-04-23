@@ -44,8 +44,10 @@ https://github.com/scalacenter/scalafix
 build.properties
 ----------------
 ```
-sbt.version=0.13.13
+sbt.version=0.13.15
 ```
+
+Older versions of sbt are not supported.
 
 plugins.sbt
 -----------
