@@ -5,6 +5,8 @@ import sbt.Keys._
 
 object DottyPlugin extends AutoPlugin {
   object autoImport {
+    val isDotty = settingKey[Boolean]("Is this project compiled with Dotty?")
+
     // NOTE:
     // - this is a def to support `scalaVersion := dottyLatestNightlyBuild`
     // - if this was a taskKey, then you couldn't do `scalaVersion := dottyLatestNightlyBuild`
@@ -14,7 +16,7 @@ object DottyPlugin extends AutoPlugin {
       val Version = """      <version>(0.1\..*-bin.*)</version>""".r
       val latest = scala.io.Source
           .fromURL(
-            "http://repo1.maven.org/maven2/ch/epfl/lamp/dotty_2.11/maven-metadata.xml")
+            "http://repo1.maven.org/maven2/ch/epfl/lamp/dotty_0.1/maven-metadata.xml")
           .getLines()
           .collect { case Version(version) => version }
           .toSeq
@@ -23,27 +25,61 @@ object DottyPlugin extends AutoPlugin {
       latest
     }
   }
+
+  import autoImport._
+
   override def requires: Plugins = plugins.JvmPlugin
+  override def trigger = allRequirements
+
+  // Adapted from CrossVersionUtil#sbtApiVersion
+  private def sbtFullVersion(v: String): Option[(Int, Int, Int)] =
+  {
+    val ReleaseV = """(\d+)\.(\d+)\.(\d+)(-\d+)?""".r
+    val CandidateV = """(\d+)\.(\d+)\.(\d+)(-RC\d+)""".r
+    val NonReleaseV = """(\d+)\.(\d+)\.(\d+)([-\w+]*)""".r
+    v match {
+      case ReleaseV(x, y, z, ht) => Some((x.toInt, y.toInt, z.toInt))
+      case CandidateV(x, y, z, ht)  => Some((x.toInt, y.toInt, z.toInt))
+      case NonReleaseV(x, y, z, ht) if z.toInt > 0 => Some((x.toInt, y.toInt, z.toInt))
+      case _ => None
+    }
+  }
+
 
   override def projectSettings: Seq[Setting[_]] = {
-
-    // http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22ch.epfl.lamp%22%20dotty
-    val dottyVersion = sys.env.get("COMPILERVERSION") getOrElse {
-      "0.1.1-20170214-606e36b-NIGHTLY"
-    }
-
     Seq(
-      // Dotty version
-      scalaVersion := dottyVersion,
-      scalaOrganization := "ch.epfl.lamp",
+      isDotty := {
+        val log = sLog.value
 
-      // Dotty is compatible with Scala 2.11, as such you can use 2.11
-      // binaries. However, when publishing - this version number should be set
-      // to 0.1 (the dotty version number)
-      scalaBinaryVersion := "2.11",
+        sbtFullVersion(sbtVersion.value) match {
+          case Some((sbtMajor, sbtMinor, sbtPatch)) if sbtMajor == 0 && sbtMinor == 13 && sbtPatch < 15 =>
+            log.error(s"The sbt-dotty plugin cannot work with this version of sbt (${sbtVersion.value}), sbt >= 0.13.15 is required.")
+            false
+          case _ =>
+            scalaVersion.value.startsWith("0.")
+        }
+      },
+      scalaOrganization := {
+        if (isDotty.value)
+          "ch.epfl.lamp"
+        else
+          scalaOrganization.value
+      },
 
-      // dotty requires the latest version of the sbt compiler interface
-      resolvers += Resolver.typesafeIvyRepo("releases")
+      scalaBinaryVersion := {
+        if (isDotty.value)
+          "0.1" // TODO: Fix sbt so that this isn't needed
+        else
+          scalaBinaryVersion.value
+      },
+
+      // Needed until https://github.com/sbt/sbt/issues/3012 is fixed
+      resolvers ++= {
+        if (isDotty.value)
+          Seq(Resolver.typesafeIvyRepo("releases"))
+        else
+          Nil
+      }
     )
   }
 }

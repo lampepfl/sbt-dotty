@@ -25,11 +25,17 @@ build.sbt
 ```
 name := "application"
 version := "0.1"
-enablePlugins(DottyPlugin)
+
+scalaVersion := "0.1.1-bin-20170501-b19d1fb-NIGHTLY"
 ```
 
+New builds of dotty are published nightly, scroll to the end of
+https://repo1.maven.org/maven2/ch/epfl/lamp/dotty_0.1 to find the latest version
+number. Alternatively, you can set `scalaVersion := dottyLatestNightlyBuild.get`
+to automatically use the latest nightly build of dotty.
+
 If you want to migrate an existing library, it might be a good idea to start
-out with the compatibility mode by adding
+out with the compatibility mode by adding:
 
 ```
 scalacOptions ++= Seq("-language:Scala2")
@@ -54,11 +60,3 @@ plugins.sbt
 ```
 addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC3")
 ```
-
-Troubleshooting
----------------
-* **P:** I'm getting unresolved dependency errors.
-
-  **A:** You've probably set `scalaVersion` in your `build.sbt` file. The
-  plugin takes care of setting the correct `scalaVersion`, so please don't
-  override this.
