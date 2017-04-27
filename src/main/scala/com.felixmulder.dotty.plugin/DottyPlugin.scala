@@ -11,7 +11,7 @@ object DottyPlugin extends AutoPlugin {
     // - if this was a settingKey, then this would evaluate even if you don't use it.
     def dottyLatestNightlyBuild: Option[String] = {
       println("Fetching latest Dotty nightly version (requires an internet connection)...")
-      val Version = """      <version>(0.1\..*)</version>""".r
+      val Version = """      <version>(0.1\..*-bin.*)</version>""".r
       val latest = scala.io.Source
           .fromURL(
             "http://repo1.maven.org/maven2/ch/epfl/lamp/dotty_2.11/maven-metadata.xml")
