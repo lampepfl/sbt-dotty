@@ -50,7 +50,7 @@ sbt.version=0.13.13
 plugins.sbt
 -----------
 ```
-addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC2")
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC3")
 ```
 
 Troubleshooting
