@@ -24,6 +24,33 @@ object DottyPlugin extends AutoPlugin {
       println(s"Latest Dotty nightly build version: $latest")
       latest
     }
+
+    implicit class DottyCompatModuleID(moduleID: ModuleID) {
+      /** If this ModuleID cross-version is a Dotty version, replace it
+       *  by the Scala 2.x version that the Dotty version is retro-compatible with.
+       *
+       *  This setting is useful when your build contains dependencies that have only
+       *  been published with Scala 2.x, if you have:
+       *  {{{
+       *  libraryDependencies += "a" %% "b" % "c"
+       *  }}}
+       *  you can replace it by:
+       *  {{{
+       *  libraryDependencies += ("a" %% "b" % "c").withDottyCompat()
+       *  }}}
+       *  This will have no effect when compiling with Scala 2.x, but when compiling
+       *  with Dotty this will change the cross-version to a Scala 2.x one. This
+       *  works because Dotty is currently retro-compatible with Scala 2.x.
+       *
+       *  NOTE: Dotty's retro-compatibility with Scala 2.x will be dropped before
+       *  Dotty is released, you should not rely on it.
+       */
+      def withDottyCompat(): ModuleID =
+        moduleID.cross(CrossVersion.binaryMapped {
+          case version if version.startsWith("0.") => "2.11"
+          case version => version
+        })
+    }
   }
 
   import autoImport._

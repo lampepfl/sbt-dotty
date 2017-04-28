@@ -47,6 +47,26 @@ valid Dotty code from compiling.
 A tool to port code from Scala 2.x to Dotty is currently in development at
 https://github.com/scalacenter/scalafix
 
+If your build contains dependencies that have only been published for Scala 2.x,
+you may be able to get them to work on Dotty by replacing:
+
+```scala
+    libraryDependencies += "a" %% "b" % "c"
+```
+
+by:
+
+```scala
+    libraryDependencies += ("a" %% "b" % "c").withDottyCompat()
+```
+
+This will have no effect when compiling with Scala 2.x, but when compiling
+with Dotty this will change the cross-version to a Scala 2.x one. This
+works because Dotty is currently retro-compatible with Scala 2.x.
+
+**NOTE**: Dotty's retro-compatibility with Scala 2.x will be dropped before
+Dotty is released, you should not rely on it.
+
 build.properties
 ----------------
 ```
