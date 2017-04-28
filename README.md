@@ -22,7 +22,7 @@ project.
 
 build.sbt
 ---------
-```
+```scala
 name := "application"
 version := "0.1"
 
@@ -67,16 +67,16 @@ works because Dotty is currently retro-compatible with Scala 2.x.
 **NOTE**: Dotty's retro-compatibility with Scala 2.x will be dropped before
 Dotty is released, you should not rely on it.
 
-build.properties
+project/build.properties
 ----------------
-```
+```scala
 sbt.version=0.13.15
 ```
 
 Older versions of sbt are not supported.
 
-plugins.sbt
+project/plugins.sbt
 -----------
-```
+```scala
 addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC3")
 ```
