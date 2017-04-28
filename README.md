@@ -78,5 +78,5 @@ Older versions of sbt are not supported.
 project/plugins.sbt
 -----------
 ```scala
-addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC3")
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC4")
 ```
