@@ -98,14 +98,6 @@ object DottyPlugin extends AutoPlugin {
           "0.1" // TODO: Fix sbt so that this isn't needed
         else
           scalaBinaryVersion.value
-      },
-
-      // Needed until https://github.com/sbt/sbt/issues/3012 is fixed
-      resolvers ++= {
-        if (isDotty.value)
-          Seq(Resolver.typesafeIvyRepo("releases"))
-        else
-          Nil
       }
     )
   }
