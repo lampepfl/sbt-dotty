@@ -1,4 +1,4 @@
-package com.felixmulder.dotty.plugin
+package dotty.tools.sbtplugin
 
 import sbt._
 import sbt.Keys._
