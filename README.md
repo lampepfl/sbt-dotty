@@ -17,7 +17,7 @@ standard structure:
 ```
 
 Please see the
-[example](https://github.com/felixmulder/sbt-dotty/tree/master/example)
+[example](https://github.com/lampepfl/sbt-dotty/tree/master/example)
 project.
 
 build.sbt
