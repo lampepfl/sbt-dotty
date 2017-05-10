@@ -30,7 +30,7 @@ scalaVersion := "0.1.1-bin-20170501-b19d1fb-NIGHTLY"
 ```
 
 New builds of dotty are published nightly, scroll to the end of
-https://repo1.maven.org/maven2/ch/epfl/lamp/dotty_0.1 to find the latest version
+https://repo1.maven.org/maven2/ch/epfl/lamp/dotty_0.1/ to find the latest version
 number. Alternatively, you can set `scalaVersion := dottyLatestNightlyBuild.get`
 to automatically use the latest nightly build of dotty.
 
