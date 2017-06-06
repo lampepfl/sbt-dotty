@@ -6,6 +6,8 @@ lazy val root = (project in file("."))
   .settings(
     commonSettings,
     publishingSettings,
+    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % Test,
+    testOptions in Test += Tests.Argument(TestFrameworks.JUnit),
     sbt.ScriptedPlugin.scriptedSettings,
     scriptedLaunchOpts += "-Dplugin.version=" + version.value,
     scriptedBufferLog := false
@@ -15,7 +17,7 @@ lazy val root = (project in file("."))
 lazy val commonSettings = Seq(
   organization := "ch.epfl.lamp",
   name := "sbt-dotty",
-  version := "0.1.0-RC4",
+  version := "0.1.0-SNAPSHOT",
   scalacOptions ++= Seq("-feature", "-deprecation", "-encoding", "utf8"),
   scalaVersion := "2.10.6",
   sbtPlugin := true
