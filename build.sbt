@@ -6,6 +6,8 @@ lazy val root = (project in file("."))
   .settings(
     commonSettings,
     publishingSettings,
+    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % Test,
+    testOptions in Test += Tests.Argument(TestFrameworks.JUnit),
     sbt.ScriptedPlugin.scriptedSettings,
     scriptedLaunchOpts += "-Dplugin.version=" + version.value,
     scriptedBufferLog := false
