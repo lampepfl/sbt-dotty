@@ -1,6 +1,4 @@
-sbt-dotty
-=========
+# This repository is obsolete
 
-This plugin allows you to easily create an sbt dotty project using the
-standard structure. The project has been merged with the
-[dotty](http://github.com/lampepfl/dotty) repo.
+sbt-dotty is now part of the main dotty repository at
+https://github.com/lampepfl/dotty/tree/master/sbt-dotty
