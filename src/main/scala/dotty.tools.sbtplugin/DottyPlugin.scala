@@ -95,10 +95,10 @@ object DottyPlugin extends AutoPlugin {
       },
 
       scalaBinaryVersion := {
-        if (isDotty.value)
-          "0.1" // TODO: Fix sbt so that this isn't needed
-        else
-          scalaBinaryVersion.value
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((0, minor)) => s"0.$minor"
+          case _ => scalaBinaryVersion.value
+        }
       }
     )
   }
